@@ -1,0 +1,23 @@
+{
+  "name": "easy-time-sheet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elihschiff/easy-time-sheet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elihschiff/easy-time-sheet/issues"
+  },
+  "homepage": "https://github.com/elihschiff/easy-time-sheet#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1"
+  }
+}
