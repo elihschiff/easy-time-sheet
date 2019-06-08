@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname+'/website/html/timesheet.html');
+  res.sendFile(__dirname+'/index.html');
 });
 
 var fs = require('fs');
