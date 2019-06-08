@@ -9,69 +9,91 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <link rel="stylesheet" type="text/css" href="/css/timesheet.css"></link>
+  <link rel="stylesheet" type="text/css" href="/css/timesheet.css">
+  </link>
   <title>Easy Time Sheet</title>
 </head>
 
 <body>
-  <br>
-  <div id="app" class="container-fluid">
-    <div class="row" v-cloak>
-      <div class="col-md-8 offset-md-2">
-        <h2>Happy {{currentDOW()}}!</h2>
-        <br>
-        <table class="table table-bordered table-striped  table-sm">
-          <thead>
-            <tr>
-              <th scope="col">Day</th>
-              <th scope="col">Time In</th>
-              <th scope="col">Luch Start</th>
-              <th scope="col">Lunch End</th>
-              <th scope="col">Time Out</th>
-              <th scope="col">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="day in daysOfTheWeek">
-              <template v-if="times[day]">
-                <td style="width: 20%">{{day}}</td>
-                <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
-                <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
-                <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
-                <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
-                <td style="width: 8%">
-                  {{totalTimeDay(times[day])}}
-                </td>
-              </template>
-            </tr>
-            <tr>
-              <td class="only-top-border"></td>
-              <td class="only-top-border"></td>
-              <td class="only-top-border"></td>
-              <td class="only-top-border"></td>
-              <td class="no-left-bot-border"></td>
-              <td>{{totalTime(times)}}</td>
-            </tr>
-          </tbody>
-        </table>
+  <div id="app">
 
-        <h6 v-if="whenToLeaveToday()">
-          You should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveToday())">{{whenToLeaveToday()}}</button> to reach a {{workDayLength}} hour work day
-        </h6>
-        <h6 v-if="whenToLeaveWeekTotal()">
-          To stay on track for a {{workDayLength*5}} hour work week you should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveWeekTotal())">{{whenToLeaveWeekTotal()}}</button>
-        </h6>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="mx-auto order-0">
+        <a class="navbar-brand mx-auto" href="#" style="padding-right:2rem">Easy Time Sheet</a>
+      </div>
+    </nav>
 
-        <!-- <h6>
+
+    <div class="container-fluid">
+      <div class="row" v-cloak>
+        <div class="col-md-8 offset-md-2">
+          <br>
+          <div class="row">
+            <h2 class="col">Happy {{currentDOW()}}!</h2>
+            <div class="input-group mb-3 col">
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="username">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" v-on:click="login()">Login</button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <table class="table table-bordered table-striped  table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Time In</th>
+                <th scope="col">Luch Start</th>
+                <th scope="col">Lunch End</th>
+                <th scope="col">Time Out</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="day in daysOfTheWeek">
+                <template v-if="times[day]">
+                  <td style="width: 20%">{{day}}</td>
+                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
+                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
+                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
+                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
+                  <td style="width: 8%">
+                    {{totalTimeDay(times[day])}}
+                  </td>
+                </template>
+              </tr>
+              <tr>
+                <td class="only-top-border"></td>
+                <td class="only-top-border"></td>
+                <td class="only-top-border"></td>
+                <td class="only-top-border"></td>
+                <td class="no-left-bot-border"></td>
+                <td>{{totalTime(times)}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="button" class="btn btn-success" v-on:click="save()">Save</button>
+
+
+          <h6 v-if="whenToLeaveToday()">
+            You should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveToday())">{{whenToLeaveToday()}}</button> to reach a {{workDayLength}} hour work day
+          </h6>
+          <h6 v-if="whenToLeaveWeekTotal()">
+            To stay on track for a {{workDayLength*5}} hour work week you should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveWeekTotal())">{{whenToLeaveWeekTotal()}}</button>
+          </h6>
+
+          <!-- <h6>
           If you want to leave by you should spend at lunch
         </h6> -->
+        </div>
       </div>
     </div>
   </div>
 
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>

@@ -77,7 +77,8 @@ var app = new Vue({
         "time_out": {hour:null,min:null},
         "total":{hour:null,min:null}
       },
-    }
+    },
+    username:""
   },
   methods: {
     fillAsNow: function(day, timeSlot){
@@ -168,6 +169,17 @@ var app = new Vue({
       newTime = newTime.split(":");
       day.time_out.hour = newTime[0];
       day.time_out.min = newTime[1];
+    },
+    login: function(){
+      if(!this.username){return;}
+      $.post( "login?username="+this.username, function( data ) {
+        console.log(data)
+        app.times = JSON.parse(data);
+      });
+    },
+    save:function(){
+      if(!this.username){alert("Please enter a username first"); return;}
+      $.post( "save?username="+this.username, {data:JSON.stringify(this.times)} );
     }
   }
 })
