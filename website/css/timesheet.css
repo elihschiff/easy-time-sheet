@@ -1,0 +1,10 @@
+.only-top-border {
+    border-bottom: hidden!important;
+    border-left: hidden!important;
+    border-right: hidden!important;
+}
+
+.no-left-bot-border{
+  border-bottom: hidden!important;
+  border-left: hidden!important;
+}

@@ -9,15 +9,15 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+  <link rel="stylesheet" type="text/css" href="/css/timesheet.css"></link>
   <title>Easy Time Sheet</title>
 </head>
 
 <body>
-  </div>
   <div id="app" class="container-fluid">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <table class="table table-bordered table-striped table-sm">
+        <table class="table table-bordered table-striped  table-sm">
           <thead>
             <tr>
               <th scope="col">Day</th>
@@ -25,17 +25,29 @@
               <th scope="col">Luch Start</th>
               <th scope="col">Lunch End</th>
               <th scope="col">Time Out</th>
+              <th scope="col">Total</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="day in daysOfTheWeek">
-              <template v-if="data[day]">
-                <td>{{day}}</td>
-                <time-cell v-bind:times="data[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
-                <time-cell v-bind:times="data[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
-                <time-cell v-bind:times="data[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
-                <time-cell v-bind:times="data[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
+            <tr v-for="day in Object.keys(times)">
+              <template v-if="times[day]">
+                <td style="width: 20%">{{day}}</td>
+                <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
+                <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
+                <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
+                <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
               </template>
+              <td>
+                {{totalTimeDay(times[day])}}
+              </td>
+            </tr>
+            <tr>
+              <td class="only-top-border"></td>
+              <td class="only-top-border"></td>
+              <td class="only-top-border"></td>
+              <td class="only-top-border"></td>
+              <td class="no-left-bot-border"></td>
+              <td>{{totalTime(times)}}</td>
             </tr>
           </tbody>
         </table>
