@@ -1,3 +1,5 @@
+[v-cloak] { display: none; }
+
 .only-top-border {
     border-bottom: hidden!important;
     border-left: hidden!important;

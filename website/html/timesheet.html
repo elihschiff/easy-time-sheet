@@ -14,9 +14,12 @@
 </head>
 
 <body>
+  <br>
   <div id="app" class="container-fluid">
-    <div class="row">
+    <div class="row" v-cloak>
       <div class="col-md-8 offset-md-2">
+        <h2>Happy {{currentDOW()}}!</h2>
+        <br>
         <table class="table table-bordered table-striped  table-sm">
           <thead>
             <tr>
@@ -29,17 +32,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="day in Object.keys(times)">
+            <tr v-for="day in daysOfTheWeek">
               <template v-if="times[day]">
                 <td style="width: 20%">{{day}}</td>
                 <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
                 <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
                 <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
                 <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
+                <td style="width: 8%">
+                  {{totalTimeDay(times[day])}}
+                </td>
               </template>
-              <td>
-                {{totalTimeDay(times[day])}}
-              </td>
             </tr>
             <tr>
               <td class="only-top-border"></td>
@@ -51,6 +54,17 @@
             </tr>
           </tbody>
         </table>
+
+        <h6 v-if="whenToLeaveToday()">
+          You should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveToday())">{{whenToLeaveToday()}}</button> to reach a {{workDayLength}} hour work day
+        </h6>
+        <h6 v-if="whenToLeaveWeekTotal()">
+          To stay on track for a {{workDayLength*5}} hour work week you should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveWeekTotal())">{{whenToLeaveWeekTotal()}}</button>
+        </h6>
+
+        <!-- <h6>
+          If you want to leave by you should spend at lunch
+        </h6> -->
       </div>
     </div>
   </div>
