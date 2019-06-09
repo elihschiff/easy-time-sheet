@@ -81,7 +81,8 @@ var app = new Vue({
       },
     },
     username:"",
-    loggedIn:false
+    loggedIn:false,
+    saving:false
   },
   methods: {
     fillAsNow: function(day, timeSlot){
@@ -135,18 +136,24 @@ var app = new Vue({
     },
     currentDOWNum: function(){
       var d = new Date();
-      return 3;
+      // return 3;
       return d.getDay();
     },
     currentDOW: function(){
       var d = new Date();
       var dayAsNum = d.getDay();
 
+      if(this.currentDOWNum() >= this.daysOfTheWeek.length){
+        return null;
+      }
       return this.daysOfTheWeek[this.currentDOWNum()];
     },
     whenToLeaveToday: function(totalTimeWanted){
       if(totalTimeWanted == null){
         totalTimeWanted = [this.workDayLength,0];
+      }
+      if(this.currentDOWNum() >= this.daysOfTheWeek.length){
+        return null;
       }
       var day = this.times[this.currentDOW()];
       if(day.time_in.hour == null || day.lunch_start.hour == null || day.lunch_end.hour == null || day.time_out.hour != null){
@@ -159,6 +166,9 @@ var app = new Vue({
       return zeroPad(endtime[0])+":"+zeroPad(endtime[1]);
     },
     whenToLeaveWeekTotal: function(){
+      if(this.currentDOWNum() >= this.daysOfTheWeek.length){
+        return null;
+      }
       var totalTimeThisWeek = this.totalTime(this.currentDOW())
       if(totalTimeThisWeek == "Error"){
         return;
@@ -183,10 +193,19 @@ var app = new Vue({
       });
       localStorage.setItem("username",this.username);
     },
-    save:function(){
-      console.log("saving")
-      if(!this.username){alert("Please enter a username first"); return;}
-      $.post( "save?username="+this.username, {data:JSON.stringify(this.times)} );
+    save:function(force){
+      if(app.saving && force!=true){
+        return;
+      }
+      if(!app.username){return;}
+      app.saving = true;
+      setTimeout(function() {
+        console.log("saving")
+        $.post( "save?username="+app.username, {data:JSON.stringify(app.times)}, function(){
+          app.saving = false;
+          console.log("res")
+        });
+      }, 3000);
     }
   },
   mounted() {
@@ -197,7 +216,6 @@ var app = new Vue({
       this.username = localStorage.username;
     }
     this.$watch('times', function () {
-      console.log('a thing changed')
       app.save()
     }, {deep:true})
   }
@@ -232,3 +250,17 @@ function addTimes(t1,t2){
 function zeroPad(num) {
   return num.toString().padStart(2, "0");
 }
+
+window.onbeforeunload = function (e) {
+  if(app.saving){
+    var message = "Your confirmation message goes here.",
+    e = e || window.event;
+    // For IE and Firefox
+    if (e) {
+      e.returnValue = message;
+    }
+
+    // For Safari
+    return message;
+  }
+};

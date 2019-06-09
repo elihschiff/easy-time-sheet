@@ -29,4 +29,5 @@ app.post('/login', function(req, res) {
 app.post('/save', function(req, res) {
   database[req.query.username.toLowerCase()] = JSON.parse(req.body.data);
   fs.writeFile("./database.json", JSON.stringify(database), function(){});
+  res.send("done")
 });
