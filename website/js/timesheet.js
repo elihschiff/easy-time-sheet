@@ -213,7 +213,7 @@ var app = new Vue({
           app.saving = false;
           console.log("res")
         });
-      }, 3000);
+      }, 2000);
     },
     getSaveState: function(){
       if(this.saving){
