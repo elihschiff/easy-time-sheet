@@ -35,7 +35,7 @@
               <button :disabled="loggedIn" class="btn btn-outline-secondary" type="button" id="button-addon2" v-on:click="login()" style="border-radius:0px 5px 5px 0px">Login</button>
             </div>
           </div>
-          <br>
+          <h6>{{getSaveState()}}<span id="savingDots" :class="{hide_element:!saving}">...</span></h6>
           <template  v-if="loggedIn">
             <table class="table table-bordered table-striped  table-sm">
               <thead>

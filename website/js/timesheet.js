@@ -85,7 +85,8 @@ var app = new Vue({
     },
     username:"",
     loggedIn:false,
-    saving:false
+    saving:false,
+    firstSave:false
   },
   methods: {
     fillAsNow: function(day, timeSlot){
@@ -213,6 +214,13 @@ var app = new Vue({
           console.log("res")
         });
       }, 3000);
+    },
+    getSaveState: function(){
+      if(this.saving){
+        return "Saving";
+      }else{
+        return "All Changes Saved"
+      }
     }
   },
   mounted() {
@@ -223,7 +231,19 @@ var app = new Vue({
       this.username = localStorage.username;
     }
     this.$watch('times', function () {
-      app.save()
+      if(app.firstSave==false){
+        app.firstSave = true;
+        var dots = document.getElementById("savingDots")
+        window.setInterval(function(){
+          if(dots.innerHTML.length < 3){
+            dots.innerHTML += ".";
+          }else{
+            dots.innerHTML = "";
+          }
+        }, 500);
+      }else{
+        app.save()
+      }
     }, {deep:true})
   }
 })
