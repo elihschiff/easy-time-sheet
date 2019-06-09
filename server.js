@@ -4,7 +4,7 @@ const app = express()
 const port = 3000
 
 
-app.listen(port, () => console.log(`Listening on port ${port}!`))
+app.listen(process.env.PORT || port)
 
 app.use(express.static('website'))
 app.use(bodyParser.urlencoded({ extended: false }));
