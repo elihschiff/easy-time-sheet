@@ -12,12 +12,14 @@ Vue.component('time-cell', {
       // times[time_slot] = d.getHours()+":"+d.getMinutes();
       times[time_slot].hour = d.getHours();
       times[time_slot].min = d.getMinutes();
+      // app.save()
     },
     removeTime: function(times, time_slot, day_of_week){
       console.log("Removed time: " + times[time_slot].hour + ":" + times[time_slot].min + " from " + time_slot + " on " + day_of_week)
       times[time_slot].hour = null;
       times[time_slot].min = null;
       times.total.hour = null;
+      // app.save()
     }
   },
   template:`
@@ -78,7 +80,8 @@ var app = new Vue({
         "total":{hour:null,min:null}
       },
     },
-    username:""
+    username:"",
+    loggedIn:false
   },
   methods: {
     fillAsNow: function(day, timeSlot){
@@ -161,7 +164,6 @@ var app = new Vue({
         return;
       }
       totalTimeThisWeek = totalTimeThisWeek.split(":");
-      console.log(this.workDayLength*this.currentDOWNum());
       return this.whenToLeaveToday(subtractTimes([this.workDayLength*(this.currentDOWNum()+1),0],totalTimeThisWeek));
     },
     newLeaveTime: function(newTime){
@@ -174,13 +176,30 @@ var app = new Vue({
       if(!this.username){return;}
       $.post( "login?username="+this.username, function( data ) {
         console.log(data)
-        app.times = JSON.parse(data);
+        if(data != "Not Found"){
+          app.times = JSON.parse(data);
+        }
+        app.loggedIn = true;
       });
+      localStorage.setItem("username",this.username);
     },
     save:function(){
+      console.log("saving")
       if(!this.username){alert("Please enter a username first"); return;}
       $.post( "save?username="+this.username, {data:JSON.stringify(this.times)} );
     }
+  },
+  mounted() {
+
+  },
+  mounted: function () {
+    if (localStorage.username) {
+      this.username = localStorage.username;
+    }
+    this.$watch('times', function () {
+      console.log('a thing changed')
+      app.save()
+    }, {deep:true})
   }
 })
 

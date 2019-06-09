@@ -19,14 +19,14 @@ var database = JSON.parse(fs.readFileSync('./database.json', 'utf8'));
 
 
 app.post('/login', function(req, res) {
-  if(!database[req.query.username]){
+  if(!database[req.query.username.toLowerCase()]){
     res.send("Not Found");
   }else{
-    res.send(JSON.stringify(database[req.query.username]));
+    res.send(JSON.stringify(database[req.query.username.toLowerCase()]));
   }
 });
 
 app.post('/save', function(req, res) {
-  database[req.query.username] = JSON.parse(req.body.data);
+  database[req.query.username.toLowerCase()] = JSON.parse(req.body.data);
   fs.writeFile("./database.json", JSON.stringify(database), function(){});
 });

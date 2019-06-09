@@ -31,58 +31,57 @@
           <div class="row">
             <h2 class="col">Happy {{currentDOW()}}!</h2>
             <div class="input-group mb-3 col">
-              <input type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="username">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2" v-on:click="login()">Login</button>
-              </div>
+              <input :disabled="loggedIn" type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="username">
+              <button :disabled="loggedIn" class="btn btn-outline-secondary" type="button" id="button-addon2" v-on:click="login()" style="border-radius:0px 5px 5px 0px">Login</button>
             </div>
           </div>
           <br>
-          <table class="table table-bordered table-striped  table-sm">
-            <thead>
-              <tr>
-                <th scope="col">Day</th>
-                <th scope="col">Time In</th>
-                <th scope="col">Luch Start</th>
-                <th scope="col">Lunch End</th>
-                <th scope="col">Time Out</th>
-                <th scope="col">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="day in daysOfTheWeek">
-                <template v-if="times[day]">
-                  <td style="width: 20%">{{day}}</td>
-                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
-                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
-                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
-                  <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
-                  <td style="width: 8%">
-                    {{totalTimeDay(times[day])}}
-                  </td>
-                </template>
-              </tr>
-              <tr>
-                <td class="only-top-border"></td>
-                <td class="only-top-border"></td>
-                <td class="only-top-border"></td>
-                <td class="only-top-border"></td>
-                <td class="no-left-bot-border"></td>
-                <td>{{totalTime(times)}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <template  v-if="loggedIn">
+            <table class="table table-bordered table-striped  table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Day</th>
+                  <th scope="col">Time In</th>
+                  <th scope="col">Luch Start</th>
+                  <th scope="col">Lunch End</th>
+                  <th scope="col">Time Out</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="day in daysOfTheWeek">
+                  <template v-if="times[day]">
+                    <td style="width: 20%">{{day}}</td>
+                    <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
+                    <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
+                    <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
+                    <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
+                    <td style="width: 8%">
+                      {{totalTimeDay(times[day])}}
+                    </td>
+                  </template>
+                </tr>
+                <tr>
+                  <td class="only-top-border"></td>
+                  <td class="only-top-border"></td>
+                  <td class="only-top-border"></td>
+                  <td class="only-top-border"></td>
+                  <td class="no-left-bot-border"></td>
+                  <td>{{totalTime(times)}}</td>
+                </tr>
+              </tbody>
+            </table>
 
-          <button type="button" class="btn btn-success" v-on:click="save()">Save</button>
+            <!-- <button type="button" class="btn btn-success" v-on:click="save()">Save</button> -->
+            <!-- <br> -->
 
-
-          <h6 v-if="whenToLeaveToday()">
-            You should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveToday())">{{whenToLeaveToday()}}</button> to reach a {{workDayLength}} hour work day
-          </h6>
-          <h6 v-if="whenToLeaveWeekTotal()">
-            To stay on track for a {{workDayLength*5}} hour work week you should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveWeekTotal())">{{whenToLeaveWeekTotal()}}</button>
-          </h6>
-
+            <h6 v-if="whenToLeaveToday()">
+              You should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveToday())">{{whenToLeaveToday()}}</button> to reach a {{workDayLength}} hour work day
+            </h6>
+            <h6 v-if="whenToLeaveWeekTotal()">
+              To stay on track for a {{workDayLength*5}} hour work week you should leave today at <button type="button" class="btn btn-success" v-on:click="newLeaveTime(whenToLeaveWeekTotal())">{{whenToLeaveWeekTotal()}}</button>
+            </h6>
+          </template>
           <!-- <h6>
           If you want to leave by you should spend at lunch
         </h6> -->
