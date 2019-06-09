@@ -29,3 +29,11 @@ app.post('/save', function(req, res) {
   fs.writeFile("./database.json", JSON.stringify(database), function(){});
   res.send("done")
 });
+
+//clear database.json every week
+var schedule = require('node-schedule');
+schedule.scheduleJob('59 23 * * 7', function(){
+  fs.writeFile("./database-old" + new Date + ".json", JSON.stringify(database), function(){});
+  database = {};
+  fs.writeFile("./database.json", JSON.stringify(database), function(){});
+});
