@@ -105,6 +105,9 @@ var app = new Vue({
         if(this.times[day].total.hour == "Error"){
           return "Error";
         }
+        if(this.times[day].total.hour == null){
+          continue;
+        }
         totalh += this.times[day].total.hour;
         totalm += this.times[day].total.min;
         currentDay--;
