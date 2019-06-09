@@ -23,17 +23,19 @@ Vue.component('time-cell', {
     }
   },
   template:`
-    <td v-if="times[time_slot].hour != null" style="width: 18%">
+    <td v-if="times[time_slot].hour != null" style="width: 23%">
       <div class="input-group">
-        <input class="form-control form-control-sm" type="text" v-model.number="times[time_slot].hour">
-        <input class="form-control form-control-sm" type="text" v-model.number="times[time_slot].min">
-        <div class="input-group-append">
-          <button class="btn btn-sm btn-outline-secondary" type="button" v-on:click="removeTime(times,time_slot,day_of_week)">X</button>
-        </div>
+        <input class="form-control form-control-sm time-input" type="text" v-model.number="times[time_slot].hour">
+        <input class="form-control form-control-sm time-input" type="text" v-model.number="times[time_slot].min">
+        <!--<div class="input-group-append">
+          <button class="btn btn-sm btn-outline-secondary remove-btn" type="button" v-on:click="removeTime(times,time_slot,day_of_week)">X</button>
+        </div>-->
       </div>
+
+      <button class="btn btn-sm btn-outline-secondary remove-btn" type="button" v-on:click="removeTime(times,time_slot,day_of_week)">X</button>
     </td>
-    <td v-else :id="day_of_week + '-' + time_slot" style="width: 18%">
-      <button type="button" class="btn btn-primary btn-sm" v-on:click="fillAsNow(times,time_slot,day_of_week)">Set Now</button>
+    <td v-else :id="day_of_week + '-' + time_slot" style="width: 23%">
+      <button type="button" class="btn btn-primary fill-parrent" v-on:click="fillAsNow(times,time_slot,day_of_week)">Set Now</button>
     </td>
   `
 })
@@ -42,6 +44,7 @@ var app = new Vue({
   el: '#app',
   data: {
     daysOfTheWeek:["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    shortDaysOfTheWeek:["Mon","Tue","Wed","Thur","Fri"],
     workDayLength:8,
     times:  {
       "Monday":{
@@ -136,13 +139,14 @@ var app = new Vue({
     },
     currentDOWNum: function(){
       var d = new Date();
+
+      if(d.getDay()-1 < 0){
+        return 100;
+      }
       // return 3;
-      return d.getDay();
+      return d.getDay()-1;
     },
     currentDOW: function(){
-      var d = new Date();
-      var dayAsNum = d.getDay();
-
       if(this.currentDOWNum() >= this.daysOfTheWeek.length){
         return null;
       }
@@ -253,7 +257,7 @@ function zeroPad(num) {
 
 window.onbeforeunload = function (e) {
   if(app.saving){
-    var message = "Your confirmation message goes here.",
+    var message = "The website is currently saving. Please wait a few more seconds.",
     e = e || window.event;
     // For IE and Firefox
     if (e) {

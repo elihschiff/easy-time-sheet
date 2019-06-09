@@ -29,7 +29,7 @@
         <div class="col-md-8 offset-md-2">
           <br>
           <div class="row">
-            <h2 class="col">Happy {{currentDOW()}}!</h2>
+            <h2 class="col" v-if="currentDOW()">Happy {{currentDOW()}}!</h2>
             <div class="input-group mb-3 col">
               <input :disabled="loggedIn" type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="username">
               <button :disabled="loggedIn" class="btn btn-outline-secondary" type="button" id="button-addon2" v-on:click="login()" style="border-radius:0px 5px 5px 0px">Login</button>
@@ -49,14 +49,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="day in daysOfTheWeek">
+                <tr v-for="(day,index) in daysOfTheWeek">
                   <template v-if="times[day]">
-                    <td style="width: 20%">{{day}}</td>
+                    <td style="width: 4%">{{shortDaysOfTheWeek[index]}}</td>
                     <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_in'" v-bind:day_of_week="day"></time-cell>
                     <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_start'" v-bind:day_of_week="day"></time-cell>
                     <time-cell v-bind:times="times[day]" v-bind:time_slot="'lunch_end'" v-bind:day_of_week="day"></time-cell>
                     <time-cell v-bind:times="times[day]" v-bind:time_slot="'time_out'" v-bind:day_of_week="day"></time-cell>
-                    <td style="width: 8%">
+                    <td style="width: 4%">
                       {{totalTimeDay(times[day])}}
                     </td>
                   </template>
@@ -85,6 +85,7 @@
           <!-- <h6>
           If you want to leave by you should spend at lunch
         </h6> -->
+        <p>This website is very much in beta form. Please Please Please dont rely on it to actually keep track of your time.</p>
         </div>
       </div>
     </div>

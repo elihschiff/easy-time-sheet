@@ -10,3 +10,21 @@
   border-bottom: hidden!important;
   border-left: hidden!important;
 }
+
+.time-input{
+  padding-left: .25rem;
+  padding-right: .25rem;
+}
+
+.remove-btn{
+  margin-top: .25rem;
+  margin-bottom: .25rem;
+  padding-left: .25rem;
+  padding-right: .25rem;
+  width: 100%;
+}
+
+.fill-parrent{
+  width: 100%;
+  height: 100%;
+}
