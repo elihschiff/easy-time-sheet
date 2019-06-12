@@ -2,7 +2,7 @@
 **Easy Time Sheet** is a website developed using node and vue.js to simplify keeping track of hours worked.
 
 ## Demo
-[View Timesheet Here](timesheet.elischiff.org)
+[View Timesheet Here](http://timesheet.elischiff.org/)
 
 ## Features
 * Keep track of this weeks timesheet including lunch breaks
